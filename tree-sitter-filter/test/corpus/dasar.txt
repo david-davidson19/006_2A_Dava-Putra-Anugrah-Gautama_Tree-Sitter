@@ -1,0 +1,145 @@
+================
+perbandingan string
+================
+
+status = "open"
+
+---
+
+(query
+  (comparison
+    (identifier)
+    (string)))
+
+================
+perbandingan angka
+================
+
+priority >= 2
+
+---
+
+(query
+  (comparison
+    (identifier)
+    (number)))
+
+================
+and sederhana
+================
+
+a = 1 and b = 2
+
+---
+
+(query
+  (and_expression
+    left: (comparison
+      field: (identifier)
+      value: (number))
+    right: (comparison
+      field: (identifier)
+      value: (number))))
+
+================
+prioritas and lebih kuat dari or
+================
+
+a = 1 or b = 2 and c = 3
+
+---
+
+(query
+  (or_expression
+    left: (comparison
+      field: (identifier)
+      value: (number))
+    right: (and_expression
+      left: (comparison
+        field: (identifier)
+        value: (number))
+      right: (comparison
+        field: (identifier)
+        value: (number)))))
+
+================
+kurung mengubah prioritas
+================
+
+(a = 1 or b = 2) and c = 3
+
+---
+
+(query
+  (and_expression
+    left: (parenthesized
+      (or_expression
+        left: (comparison
+          field: (identifier)
+          value: (number))
+        right: (comparison
+          field: (identifier)
+          value: (number))))
+    right: (comparison
+      field: (identifier)
+      value: (number))))
+
+================
+not dan boolean
+================
+
+not archived = true
+
+---
+
+(query
+  (not_expression
+    (comparison
+      (identifier)
+      (boolean))))
+
+================
+in dengan tiga nilai
+================
+
+status in ("open", "pending", "closed")
+
+---
+
+(query
+  (in_expression
+    field: (identifier)
+    value: (string)
+    value: (string)
+    value: (string)))
+
+================
+contains
+================
+
+title contains "invoice"
+
+---
+
+(query
+  (contains_expression
+    field: (identifier)
+    value: (string)))
+
+================
+contains digabung in
+================
+
+title contains "invoice" and status in ("open", "pending")
+
+---
+
+(query
+  (and_expression
+    left: (contains_expression
+      field: (identifier)
+      value: (string))
+    right: (in_expression
+      field: (identifier)
+      value: (string)
+      value: (string))))
